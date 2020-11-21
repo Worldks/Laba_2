@@ -19,7 +19,10 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-@SuppressWarnings("serial");  // Для чего надо это предупреждение?
+import static java.lang.Math.*;  // Без static не работает
+
+
+//@SuppressWarnings("serial");  // Для чего надо это предупреждение?
 // Главный класс приложения, он же класс фрейма
 public class MainFrame extends JFrame {
 
@@ -31,6 +34,7 @@ public class MainFrame extends JFrame {
 // как компоненты, совместно используемые в различных методах
     private JTextField textFieldX;
     private JTextField textFieldY;
+    private JTextField textFieldZ;
 
     // Текстовое поле для отображения результата,
 // как компонент, совместно используемый в различных методах
@@ -56,7 +60,7 @@ public class MainFrame extends JFrame {
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 MainFrame.this.formulaId = formulaId;
-                imagePane.updateUI();
+                //imagePane.updateUI();
             }
         });
         radioButtons.add(button);
@@ -86,6 +90,11 @@ public class MainFrame extends JFrame {
         JLabel labelForY = new JLabel("Y:");
         textFieldY = new JTextField("0", 10);
         textFieldY.setMaximumSize(textFieldY.getPreferredSize());
+        /* --------------------------------------- */
+        JLabel labelForZ = new JLabel("Z:");                // Почему  labelForZ горит серым цветом?  перестал гореть серым после добавления  hboxVariables.add(labelForZ) 111 строка
+        textFieldZ = new JTextField("0", 10);
+        textFieldZ.setMaximumSize(textFieldZ.getPreferredSize());
+        /* --------------------------------------- */
         Box hboxVariables = Box.createHorizontalBox();
         hboxVariables.setBorder(
                 BorderFactory.createLineBorder(Color.RED));
@@ -93,10 +102,16 @@ public class MainFrame extends JFrame {
         hboxVariables.add(labelForX);
         hboxVariables.add(Box.createHorizontalStrut(10));
         hboxVariables.add(textFieldX);
-        hboxVariables.add(Box.createHorizontalStrut(100));
+        hboxVariables.add(Box.createHorizontalStrut(45));
         hboxVariables.add(labelForY);
         hboxVariables.add(Box.createHorizontalStrut(10));
         hboxVariables.add(textFieldY);
+        /* ------------------------------------- */
+        hboxVariables.add(Box.createHorizontalStrut(45));
+        hboxVariables.add(labelForZ);
+        hboxVariables.add(Box.createHorizontalStrut(10));
+        hboxVariables.add(textFieldZ);
+        /* ------------------------------------- */
         hboxVariables.add(Box.createHorizontalGlue());
 // Создать область для вывода результата
         JLabel labelForResult = new JLabel("Результат:");
@@ -118,11 +133,12 @@ public class MainFrame extends JFrame {
                 try {
                     Double x = Double.parseDouble(textFieldX.getText());
                     Double y = Double.parseDouble(textFieldY.getText());
+                    Double z = Double.parseDouble(textFieldZ.getText());
                     Double result;
                     if (formulaId==1)
-                        result = calculate1(x, y);
+                        result = calculate1(x, y, z);
                     else
-                        result = calculate2(x, y);
+                        result = calculate2(x, y, z);
                     textFieldResult.setText(result.toString());
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(MainFrame.this,
@@ -137,6 +153,7 @@ public class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent ev) {
                 textFieldX.setText("0");
                 textFieldY.setText("0");
+                textFieldZ.setText("0");
                 textFieldResult.setText("0");
             }
         });
