@@ -26,21 +26,31 @@ import static java.lang.Math.*;  // Без static не работает
 // Главный класс приложения, он же класс фрейма
 public class MainFrame extends JFrame {
 
-    // Размеры окна приложения в виде констант
     private static final int WIDTH = 400;
     private static final int HEIGHT = 320;
+
+    private Double Mem1 =  0.0;
+    private Double Mem2 =  0.0;
+    private Double Mem3 =  0.0;
 
     private JTextField textFieldX;
     private JTextField textFieldY;
     private JTextField textFieldZ;
+    private JTextField textFieldMem1;
+    private JTextField textFieldMem2;
+    private JTextField textFieldMem3;
     private JTextField textFieldResult;
 
     private JLabel imageLabel = new JLabel();
 
     private ButtonGroup radioButtons = new ButtonGroup();
+    private ButtonGroup radioButtonsForMemory = new ButtonGroup();
 
     private Box hboxFormulaType = Box.createHorizontalBox();
+    private Box hboxMemoryType = Box.createHorizontalBox();
+
     private int formulaId = 1;
+    private int memoryId = 1;
 
     public Double calculate1(Double x, Double y, Double z) {
         return (Math.pow((Math.log(Math.pow(1 + x, 2)) + Math.cos(Math.PI * z*z*z)) , Math.sin(y)));
@@ -50,7 +60,7 @@ public class MainFrame extends JFrame {
         return (Math.pow(Math.cos(Math.PI*x*x*x) + Math.log(1 + y*y), 0.25) + Math.pow(Math.E, x*x) + Math.pow(1/x, 0.5) + Math.pow(Math.cos(Math.E), y));
     }
     // Вопросик с картинками    ---------------------------------------------------------
-    private String[] ImagePath = {"E:\\University\\Программирование\\Лабалаторные\\2 курс\\Формулы для второй лабы\\1.bmp", "E:\\University\\Программирование\\Лабалаторные\\2 курс\\Формулы для второй лабы\\2.bmp"};
+    private String[] ImagePath = {"E:\\University\\Программирование\\Лабалаторные\\2 курс\\Формулы для второй лабы\\1.jpg", "E:\\University\\Программирование\\Лабалаторные\\2 курс\\Формулы для второй лабы\\2.bmp"};
     BufferedImage imageFunction;
     {
         try {
@@ -78,14 +88,34 @@ public class MainFrame extends JFrame {
         hboxFormulaType.add(button);
     }
 
+    private void addRadioButtonForMemory(String buttonName, final int memoryId){
+        JRadioButton button = new JRadioButton(buttonName);
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                MainFrame.this.memoryId = memoryId;
+            }
+        });
+        radioButtonsForMemory.add(button);
+        hboxMemoryType.add(button);
+    }
+
     // Конструктор класса
     public MainFrame() {
+
         super("Вычисление формулы");
 
         setSize(WIDTH, HEIGHT);
         Toolkit kit = Toolkit.getDefaultToolkit();
-// Отцентрировать окно приложения на экране
+
         setLocation((kit.getScreenSize().width - WIDTH)/2, (kit.getScreenSize().height - HEIGHT)/2);
+
+        hboxMemoryType.add(Box.createHorizontalGlue());
+        addRadioButtonForMemory("Переменная 1", 1);
+        addRadioButtonForMemory("Переменная 2", 2);
+        addRadioButtonForMemory("Переменная 3", 3);
+        radioButtonsForMemory.setSelected(radioButtonsForMemory.getElements().nextElement().getModel(), true);
+        hboxMemoryType.add(Box.createHorizontalGlue());
+        hboxMemoryType.setBorder(BorderFactory.createLineBorder(Color.MAGENTA));
 
         hboxFormulaType.add(Box.createHorizontalGlue());
         addRadioButton("Формула 1", 1);
@@ -93,7 +123,22 @@ public class MainFrame extends JFrame {
         radioButtons.setSelected(radioButtons.getElements().nextElement().getModel(), true);
         hboxFormulaType.add(Box.createHorizontalGlue());
         hboxFormulaType.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
-// Создать область с полями ввода для X и Y
+
+        textFieldMem1 = new JTextField("0",15);
+        textFieldMem1.setMaximumSize(textFieldMem1.getPreferredSize());
+        textFieldMem2 = new JTextField("0",15);
+        textFieldMem2.setMaximumSize(textFieldMem2.getPreferredSize());
+        textFieldMem3 = new JTextField("0",15);
+        textFieldMem3.setMaximumSize(textFieldMem3.getPreferredSize());
+
+        Box hboxMemoryR = Box.createHorizontalBox();
+        hboxMemoryR.add(Box.createHorizontalGlue());
+        hboxMemoryR.add(textFieldMem1);
+        hboxMemoryR.add(Box.createHorizontalStrut(10));
+        hboxMemoryR.add(textFieldMem2);
+        hboxMemoryR.add(Box.createHorizontalStrut(10));
+        hboxMemoryR.add(textFieldMem3);
+        hboxMemoryR.add(Box.createHorizontalGlue());
 
         JLabel labelForX = new JLabel("X:");
         textFieldX = new JTextField("0", 10);
@@ -101,12 +146,9 @@ public class MainFrame extends JFrame {
         JLabel labelForY = new JLabel("Y:");
         textFieldY = new JTextField("0", 10);
         textFieldY.setMaximumSize(textFieldY.getPreferredSize());
-
-        /* --------------------------------------- */
         JLabel labelForZ = new JLabel("Z:");                // Почему  labelForZ горит серым цветом?  перестал гореть серым после добавления  hboxVariables.add(labelForZ) 111 строка
         textFieldZ = new JTextField("0", 10);
         textFieldZ.setMaximumSize(textFieldZ.getPreferredSize());
-        /* --------------------------------------- */
 
         Box hboxVariables = Box.createHorizontalBox();
         hboxVariables.setBorder(BorderFactory.createLineBorder(Color.RED));
@@ -122,14 +164,12 @@ public class MainFrame extends JFrame {
         hboxVariables.add(labelForZ);
         hboxVariables.add(Box.createHorizontalStrut(10));
         hboxVariables.add(textFieldZ);
-
         hboxVariables.add(Box.createHorizontalGlue());
-// Создать область для вывода результата
+
         JLabel labelForResult = new JLabel("Результат:");
-//labelResult = new JLabel("0");
         textFieldResult = new JTextField("0", 10);
-        textFieldResult.setMaximumSize(
-                textFieldResult.getPreferredSize());
+        textFieldResult.setMaximumSize(textFieldResult.getPreferredSize());
+
         Box hboxResult = Box.createHorizontalBox();
         hboxResult.add(Box.createHorizontalGlue());
         hboxResult.add(labelForResult);
@@ -137,7 +177,7 @@ public class MainFrame extends JFrame {
         hboxResult.add(textFieldResult);
         hboxResult.add(Box.createHorizontalGlue());
         hboxResult.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-        // Создать область для кнопок
+
         JButton buttonCalc = new JButton("Вычислить");
         buttonCalc.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
@@ -168,15 +208,58 @@ public class MainFrame extends JFrame {
                 textFieldResult.setText("0");
             }
         });
+
+        JButton buttonMC = new JButton("MC");
+        buttonMC.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(memoryId == 1){
+                    Mem1 =  0.0;
+                    textFieldMem1.setText("0");
+                }
+                else if(memoryId == 2){
+                    Mem2 = 0.0;
+                    textFieldMem2.setText("0");
+                }
+                else if(memoryId == 3){         // Можно просто else
+                    textFieldMem3.setText("0");
+                }
+            }
+        });
+
+        JButton buttonM = new JButton("M+");
+        buttonM.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if(memoryId == 1){
+                    Mem1 = (double)Mem1 + Double.parseDouble(textFieldResult.getText());
+                    textFieldMem1.setText(Mem1.toString());
+                    textFieldResult.setText(Mem1.toString());
+                }
+                else if(memoryId == 2){
+                    Mem2 = (double)Mem2 + Double.parseDouble(textFieldResult.getText());
+                    textFieldMem2.setText(Mem2.toString());
+                    textFieldResult.setText(Mem2.toString());
+                }
+                else if(memoryId == 3){
+                    Mem3 = (double)Mem3 + Double.parseDouble(textFieldResult.getText());
+                    textFieldMem3.setText(Mem3.toString());
+                    textFieldResult.setText(Mem3.toString());
+                }
+
+            }
+        });
+
         Box hboxButtons = Box.createHorizontalBox();
         hboxButtons.add(Box.createHorizontalGlue());
         hboxButtons.add(buttonCalc);
         hboxButtons.add(Box.createHorizontalStrut(30));
+        hboxButtons.add(buttonMC);
+        hboxButtons.add(Box.createHorizontalStrut(30));
+        hboxButtons.add(buttonM);
+        hboxButtons.add(Box.createHorizontalStrut(30));
         hboxButtons.add(buttonReset);
         hboxButtons.add(Box.createHorizontalGlue());
-        hboxButtons.setBorder(
-                BorderFactory.createLineBorder(Color.GREEN));
-        //
+        hboxButtons.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+
         imageLabel.setIcon(new ImageIcon(imageFunction));
         Box hboxImage = Box.createHorizontalBox();
         hboxImage.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
@@ -187,12 +270,15 @@ public class MainFrame extends JFrame {
 // Связать области воедино в компоновке BoxLayout
         Box contentBox = Box.createVerticalBox();
         contentBox.add(Box.createVerticalGlue());
-        contentBox.add(hboxImage);
         contentBox.add(hboxFormulaType);
+        contentBox.add(hboxImage);
+        contentBox.add(hboxMemoryType);
+        contentBox.add(hboxMemoryR);
         contentBox.add(hboxVariables);
         contentBox.add(hboxResult);
         contentBox.add(hboxButtons);
         contentBox.add(Box.createVerticalGlue());
+        //установить вертикальную коробку в область содержания главного окна
         getContentPane().add(contentBox, BorderLayout.CENTER);
     }
 
