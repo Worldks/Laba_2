@@ -8,18 +8,16 @@ import javax.swing.*;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static java.lang.StrictMath.cos;;
+
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
+
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static java.lang.Math.*;  // Без static не работает
+
 
 
 //@SuppressWarnings("serial");  // Для чего надо это предупреждение?
