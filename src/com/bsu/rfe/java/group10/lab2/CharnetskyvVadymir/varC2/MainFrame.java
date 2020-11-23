@@ -144,7 +144,7 @@ public class MainFrame extends JFrame {
         JLabel labelForY = new JLabel("Y:");
         textFieldY = new JTextField("0", 10);
         textFieldY.setMaximumSize(textFieldY.getPreferredSize());
-        JLabel labelForZ = new JLabel("Z:");                // Почему  labelForZ горит серым цветом?  перестал гореть серым после добавления  hboxVariables.add(labelForZ) 111 строка
+        JLabel labelForZ = new JLabel("Z:");
         textFieldZ = new JTextField("0", 10);
         textFieldZ.setMaximumSize(textFieldZ.getPreferredSize());
 
@@ -183,11 +183,22 @@ public class MainFrame extends JFrame {
                     Double x = Double.parseDouble(textFieldX.getText());
                     Double y = Double.parseDouble(textFieldY.getText());
                     Double z = Double.parseDouble(textFieldZ.getText());
-                    Double result;
-                    if (formulaId==1)
-                        result = calculate1(x, y, z);
-                    else
-                        result = calculate2(x, y, z);
+                    Double result = 0.0;
+                    if (formulaId==1) {
+                        if (x == -1 || x == 0 || y == 0) {
+                            System.out.println("Недопустимые значения переменных x != -1 x != 0 y != 0, Попробуйте дриге значения");
+                            System.exit(-1);
+                        } else {
+                            result = calculate1(x, y, z);
+                        }
+                    }else{
+                        if (x == -1 || x == 0 || y == 0) {
+                            System.out.println("Недопустимые значения переменных x != -1 x != 0 y != 0, Попробуйте дриге значения");
+                            System.exit(-1);
+                        } else {
+                            result = calculate2(x, y, z);
+                        }
+                    }
                     textFieldResult.setText(result.toString());
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(MainFrame.this,
