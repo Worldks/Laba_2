@@ -165,7 +165,7 @@ public class MainFrame extends JFrame {
         hboxVariables.add(Box.createHorizontalGlue());
 
         JLabel labelForResult = new JLabel("Результат:");
-        textFieldResult = new JTextField("0", 10);
+        textFieldResult = new JTextField("0", 20);
         textFieldResult.setMaximumSize(textFieldResult.getPreferredSize());
 
         Box hboxResult = Box.createHorizontalBox();
@@ -241,17 +241,14 @@ public class MainFrame extends JFrame {
                 if(memoryId == 1){
                     Mem1 = (double)Mem1 + Double.parseDouble(textFieldResult.getText());
                     textFieldMem1.setText(Mem1.toString());
-                    textFieldResult.setText(Mem1.toString());
                 }
                 else if(memoryId == 2){
                     Mem2 = (double)Mem2 + Double.parseDouble(textFieldResult.getText());
                     textFieldMem2.setText(Mem2.toString());
-                    textFieldResult.setText(Mem2.toString());
                 }
                 else if(memoryId == 3){
                     Mem3 = (double)Mem3 + Double.parseDouble(textFieldResult.getText());
                     textFieldMem3.setText(Mem3.toString());
-                    textFieldResult.setText(Mem3.toString());
                 }
 
             }
